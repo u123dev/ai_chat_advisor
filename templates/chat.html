@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .chat-container {
+            width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .chat-output {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fafafa;
+            margin-bottom: 10px;
+            height: 300px;
+        }
+        .chat-message {
+            margin-bottom: 10px;
+        }
+        .user-message {
+            font-weight: bold;
+        }
+        .bot-response {
+            margin-left: 10px;
+            color: #007bff;
+        }
+        .chat-input {
+            display: flex;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+        button {
+            padding: 8px 12px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-output" id="chat-output"></div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Input your question...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input');
+            const chatOutput = document.getElementById('chat-output');
+            const messageText = userInput.value.trim();
+
+            if (messageText === '') {
+                return;
+            }
+
+            // add user's message
+            const userMessage = document.createElement('div');
+            userMessage.className = 'chat-message user-message';
+            userMessage.textContent = `You: ${messageText}`;
+            chatOutput.appendChild(userMessage);
+
+            // send POST query
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ question: messageText })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка сети');
+                }
+
+                const data = await response.json();
+                const botResponseText = data.answer || 'Нет ответа';
+
+                // add bot's answer
+                const botResponse = document.createElement('div');
+                botResponse.className = 'chat-message bot-response';
+                botResponse.textContent = `AI bot: ${botResponseText}`;
+                chatOutput.appendChild(botResponse);
+
+            } catch (error) {
+                const errorResponse = document.createElement('div');
+                errorResponse.className = 'chat-message bot-response';
+                errorResponse.textContent = `AI bot: An error occured while getting answer.`;
+                chatOutput.appendChild(errorResponse);
+                console.error('Error:', error);
+            }
+
+            // clean input field & scroll down
+            userInput.value = '';
+            chatOutput.scrollTop = chatOutput.scrollHeight;
+        }
+    </script>
+</body>
+</html>
