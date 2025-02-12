@@ -37,7 +37,7 @@
    uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
    ```
 
-   The API will be accessible at [http://localhost:8000](http://localhost:8000).
+   AI Chat will be accessible at [http://localhost:8000](http://localhost:8000).
 
 ---
 
@@ -47,6 +47,7 @@
 
 ---
 
-### Demo
-![API](demo/ex01.jpg "Cocktail Advisor Chat 1")
-![API](demo/ex02.jpg "Cocktail Advisor Chat 2")
+### Demo: 
+
+![AI Chat](demo/ex01.jpg "Cocktail Advisor Chat 1")
+![AI Chat](demo/ex02.jpg "Cocktail Advisor Chat 2")
