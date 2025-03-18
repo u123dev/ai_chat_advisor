@@ -34,7 +34,7 @@
 
 4. **Start the FastAPI application**:
    ```bash
-   uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+   uvicorn main:app --host 0.0.0.0 --port 8000 --reload
    ```
 
    AI Chat will be accessible at [http://localhost:8000](http://localhost:8000).
